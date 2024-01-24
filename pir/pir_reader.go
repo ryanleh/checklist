@@ -11,9 +11,7 @@ type PirType int
 const (
 	None PirType = iota
 	Matrix
-	Punc
 	Perm
-	DPF
 	NonPrivate
 )
 
@@ -26,10 +24,6 @@ func NewHintReq(source *rand.Rand, pirType PirType) HintReq {
 	switch pirType {
 	case Matrix:
 		return NewMatrixHintReq()
-	case Punc:
-		return NewPuncHintReq(source)
-	case DPF:
-		return NewDPFHintReq()
 	case NonPrivate:
 		return NewNonPrivateHintReq()
 	}

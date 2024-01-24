@@ -8,14 +8,6 @@ import (
 )
 
 var registeredObjs = []interface{}{
-	pir.PuncHintReq{},
-	pir.PuncHintResp{},
-	pir.PuncQueryReq{},
-	pir.PuncQueryResp{},
-	pir.DPFHintReq{},
-	pir.DPFHintResp{},
-	pir.DPFQueryReq{},
-	pir.DPFQueryResp{},
 	pir.MatrixHintReq{},
 	pir.MatrixHintResp{},
 	pir.MatrixQueryReq{},

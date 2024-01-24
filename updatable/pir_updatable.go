@@ -238,23 +238,12 @@ func (c *Client) keysSizeWithRice() (int, error) {
 }
 
 func (c *Client) StorageNumBytes(sizeFunc func(interface{}) (int, error)) int {
-	bitsPerKey, fixedSize := c.waterfall.State()
-
-	if c.waterfall.pirType != pir.Punc {
-		numBytes, err := c.keysSizeWithRice()
-		if err != nil {
-			log.Fatalf("%s", err)
-			return 0
-		}
-		return numBytes
-	}
-
-	// Add key size
-	bitsPerKey += 32
-	// Add one bit per row for 'is deleted' bitmap
-	numBytes := (len(c.keyToPos)*bitsPerKey + c.numRows) / 8
-	numBytes += fixedSize
-	return numBytes
+    numBytes, err := c.keysSizeWithRice()
+    if err != nil {
+        log.Fatalf("%s", err)
+        return 0
+    }
+    return numBytes
 }
 
 func (c *Client) nextTimestamp() int {

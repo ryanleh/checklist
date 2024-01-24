@@ -7,25 +7,6 @@ import (
 	"gotest.tools/assert"
 )
 
-func TestPIRPunc(t *testing.T) {
-	db := MakeDB(256, 100)
-
-	client := NewPIRReader(RandSource(), Server(db), Server(db))
-
-	err := client.Init(Punc)
-	assert.NilError(t, err)
-
-	val, err := client.Read(0x7)
-	assert.NilError(t, err)
-	assert.DeepEqual(t, val, db.Row(7))
-
-	// Test refreshing by reading the same item again
-	val, err = client.Read(0x7)
-	assert.NilError(t, err)
-	assert.DeepEqual(t, val, db.Row(7))
-
-}
-
 func TestMatrix(t *testing.T) {
 	db := MakeDB(10000, 4)
 
@@ -37,19 +18,6 @@ func TestMatrix(t *testing.T) {
 	val, err := client.Read(0x7)
 	assert.NilError(t, err)
 	assert.DeepEqual(t, val, db.Row(7))
-}
-
-func TestDPF(t *testing.T) {
-	db := MakeDB(512, 32)
-
-	client := NewPIRReader(RandSource(), Server(db), Server(db))
-
-	err := client.Init(DPF)
-	assert.NilError(t, err)
-
-	val, err := client.Read(128)
-	assert.NilError(t, err)
-	assert.DeepEqual(t, val, db.Row(128))
 }
 
 const letterBytes = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"

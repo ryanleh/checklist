@@ -50,15 +50,7 @@ func (c *WaterfallClient) LayersMaxSize(nRows int) []int {
 	// if nRows == 0 {
 	// 	return []int{}
 	// }
-	if c.pirType != pir.Punc {
-		return []int{nRows}
-	}
-	maxSize := []int{nRows}
-	smallest := c.smallestLayerSize(nRows)
-	for maxSize[len(maxSize)-1] > smallest {
-		maxSize = append(maxSize, maxSize[len(maxSize)-1]/2)
-	}
-	return maxSize
+    return []int{nRows}
 }
 
 func (c *WaterfallClient) freshLayers(numRows int) []clientLayer {
@@ -94,19 +86,12 @@ func (c *WaterfallClient) HintUpdateReq(numNewRows int, rowLen int) (*UpdatableH
 		return nil, nil
 	}
 	layer := &c.layers[layerNum]
-	if layer.pirType != pir.Punc {
-		req, err := pir.NewHintReq(c.randSource, layer.pirType).Process(pir.StaticDB{NumRows: layer.numRows, RowLen: c.rowLen})
-		if err != nil {
-			return nil, err
-		}
-		layer.pir = req.InitClient(c.randSource)
-		return nil, nil
-	}
-	return &UpdatableHintReq{
-		FirstRow: layer.firstRow,
-		NumRows:  layer.numRows,
-		Req:      pir.NewPuncHintReq(c.randSource),
-	}, nil
+    req, err := pir.NewHintReq(c.randSource, layer.pirType).Process(pir.StaticDB{NumRows: layer.numRows, RowLen: c.rowLen})
+    if err != nil {
+        return nil, err
+    }
+    layer.pir = req.InitClient(c.randSource)
+    return nil, nil
 }
 
 func (c *WaterfallClient) updateLayers(numNewRows int) int {
@@ -132,9 +117,6 @@ func (c *WaterfallClient) updateLayers(numNewRows int) int {
 	layer.numRows = numNewRows
 	layer.firstRow = c.numRows - numNewRows
 	layer.pirType = c.pirType
-	if i == len(c.layers)-1 && c.pirType == pir.Punc {
-		layer.pirType = pir.DPF
-	}
 	layer.pir = nil
 
 	return i

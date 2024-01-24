@@ -54,7 +54,7 @@ func NewSBProxy(serverAddr string) *sbproxy {
 		rpcRight = rpcLeft
 	}
 
-	client := updatable.NewClient(pir.RandSource(), pir.Punc, [2]updatable.UpdatableServer{rpcLeft, rpcRight})
+	client := updatable.NewClient(pir.RandSource(), pir.NonPrivate, [2]updatable.UpdatableServer{rpcLeft, rpcRight})
 	if err = client.Init(); err != nil {
 		log.Fatalf("Failed to run PIR Init: %s\n", err)
 	}
@@ -168,6 +168,7 @@ func (proxy *sbproxy) handleFetch(w http.ResponseWriter, req *http.Request) {
 		listUp.Additions[0] = new(ThreatEntrySet)
 		listUp.Additions[0].CompressionType = CompressionType_RICE
 		listUp.Additions[0].RiceHashes, err = updatable.RiceEncodedHashes(proxy.pirClient.Keys())
+        log.Printf("Rice encoding: %v", listUp.Additions[0].RiceHashes)
 		if err != nil {
 			log.Printf("Can't Rice-encode hashes: %v", err)
 			return
@@ -219,8 +220,8 @@ func (proxy *sbproxy) handleFind(w http.ResponseWriter, req *http.Request) {
 			log.Printf("PIR query failed: %s\n", err)
 			continue
 		}
+		log.Printf("Got hash: %x", h)
 		resp.Matches[i] = newThreatMatch(hashReq.ThreatInfo.ThreatTypes[0], h)
-		log.Printf("Returning hash: %x", h)
 	}
 
 	marshal(w, resp)
@@ -230,6 +231,9 @@ func (proxy *sbproxy) handleHTTP(w http.ResponseWriter, req *http.Request) {
 	log.Printf("%v", req.Host)
 	log.Printf("%v", req.URL)
 	log.Printf("%v", req.URL.Host)
+	
+
+    log.Printf("%v", req)
 
 	if strings.HasPrefix(req.URL.Path, pathUpdate) {
 		log.Printf("FETCH")

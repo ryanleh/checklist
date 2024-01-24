@@ -40,7 +40,7 @@ func (c *Config) AddPirFlags() *Config {
 	c.FlagSet = flag.CommandLine
 	c.FlagSet.IntVar(&c.NumRows, "numRows", 10000, "Num DB Rows")
 	c.FlagSet.IntVar(&c.RowLen, "rowLen", 32, "Row length in bytes")
-	c.FlagSet.StringVar(&c.pirTypeStr, "pirType", pir.Punc.String(),
+	c.FlagSet.StringVar(&c.pirTypeStr, "pirType", pir.NonPrivate.String(),
 		fmt.Sprintf("Updatable PIR type: [%s]", strings.Join(PirTypeStrings(), "|")))
 	c.FlagSet.BoolVar(&c.Updatable, "updatable", true, "Test Updatable PIR")
 	c.FlagSet.IntVar(&c.UpdateSize, "updateSize", 500, "number of rows in each update batch (default: 500)")
