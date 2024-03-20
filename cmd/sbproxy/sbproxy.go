@@ -265,7 +265,7 @@ func main() {
 	proxy := NewSBProxy(serverAddr)
 
 	server := &http.Server{
-		Addr: ":8888",
+		Addr: ":9999",
 		Handler: http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			proxy.handleHTTP(w, r)
 		}),
